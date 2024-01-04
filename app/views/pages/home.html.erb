@@ -1,0 +1,12 @@
+<h1>Pages#home</h1>
+<p>Find me in app/views/pages/home.html.erb</p>
+<%if current_user%>
+    <p>Hello <%= current_user.email%></p>
+    <p>Account: <%= current_user.role%></p>
+    <p>Success Login</p>
+    <%= link_to 'Sign Out', destroy_user_session_path, 'data-turbo-method': :delete %>
+    <%else%>
+    <p>YOU ARE NOT SIGNED IN</p>
+        <%= link_to 'Sign Up!', new_user_registration_path%>
+          <%= link_to 'Sign IN!', new_user_session_path%>
+<%end%>
