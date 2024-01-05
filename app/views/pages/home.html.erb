@@ -1,7 +1,8 @@
 <h1>Pages#home</h1>
 <p>Find me in app/views/pages/home.html.erb</p>
 <%if current_user%>
-    <p>Hello <%= current_user.email%></p>
+    <p>Hello <%= current_user.username%></p>
+     <p>Balance: <%= current_user.balance%></p>
     <p>Account: <%= current_user.role%></p>
     <p>Success Login</p>
     <%= link_to 'Sign Out', destroy_user_session_path, 'data-turbo-method': :delete %>

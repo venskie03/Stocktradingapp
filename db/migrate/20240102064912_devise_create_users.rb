@@ -4,9 +4,10 @@ class DeviseCreateUsers < ActiveRecord::Migration[7.1]
   def change
     create_table :users do |t|
       ## Database authenticatable
+      t.string :username
       t.string :email,              null: false, default: ""
       t.string :encrypted_password, null: false, default: ""
-
+      t.integer :balance, default: 0
       ## Recoverable
       t.string   :reset_password_token
       t.datetime :reset_password_sent_at
@@ -33,6 +34,7 @@ class DeviseCreateUsers < ActiveRecord::Migration[7.1]
       # t.datetime :locked_at
 
       t.integer :role, default: 0
+
 
       t.timestamps null: false
     end
