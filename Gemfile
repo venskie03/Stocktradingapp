@@ -51,6 +51,14 @@ gem "sassc-rails"
 
 gem "simple_form"
 
+gem "cancancan", "~> 3.5"
+
+gem "rails_admin", "~> 3.1"
+
+gem "factory_bot_rails", "~> 6.4"
+
+gem "faker", "~> 3.2"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri mswin mswin64 mingw x64_mingw ]
@@ -78,3 +86,6 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+
+
