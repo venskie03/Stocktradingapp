@@ -10,9 +10,57 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_01_02_064912) do
+ActiveRecord::Schema[7.1].define(version: 2024_01_10_123047) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "orders", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "stock_id"
+    t.integer "transaction_type"
+    t.decimal "price", precision: 8, scale: 2
+    t.integer "quantity"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["stock_id"], name: "index_orders_on_stock_id"
+    t.index ["user_id"], name: "index_orders_on_user_id"
+  end
+
+  create_table "stocks", force: :cascade do |t|
+    t.string "ticker"
+    t.string "company_name"
+    t.decimal "last_transaction_price", precision: 8, scale: 2
+    t.integer "quantity"
+    t.string "logo"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["company_name"], name: "index_stocks_on_company_name"
+    t.index ["ticker"], name: "index_stocks_on_ticker", unique: true
+  end
+
+  create_table "transaction_records", force: :cascade do |t|
+    t.bigint "stock_id", null: false
+    t.bigint "buyer_id", null: false
+    t.bigint "broker_id", null: false
+    t.decimal "price", precision: 8, scale: 2
+    t.integer "quantity"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["broker_id"], name: "index_transaction_records_on_broker_id"
+    t.index ["buyer_id"], name: "index_transaction_records_on_buyer_id"
+    t.index ["stock_id"], name: "index_transaction_records_on_stock_id"
+  end
+
+  create_table "user_stocks", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "stock_id"
+    t.decimal "average_price", precision: 8, scale: 2, default: "0.0"
+    t.integer "total_shares", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["stock_id"], name: "index_user_stocks_on_stock_id"
+    t.index ["user_id"], name: "index_user_stocks_on_user_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "username"
@@ -34,4 +82,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_02_064912) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "transaction_records", "stocks"
+  add_foreign_key "transaction_records", "users", column: "broker_id"
+  add_foreign_key "transaction_records", "users", column: "buyer_id"
 end
