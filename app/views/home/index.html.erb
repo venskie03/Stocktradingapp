@@ -1,0 +1,44 @@
+<section id= "welcome-section">
+	<div id="welcome-container"> 
+		<h1 class="stock">Stock<span class="up">Trading</span></h1>
+		<div id="trend-container">
+
+			<div id="tagline">
+				<h2>Trading at your fingertips</h2>
+				<p>We are a trading platform where both traders </br> and brokers can fulfill their trade transactions. </p>
+			</div>
+		</div>
+
+		<% if current_user.nil? %>
+		<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+		<div class= "login-container">
+			<div class="field">
+				<%= f.email_field :email, autocomplete: "email", placeholder: "Email" %>
+			</div>
+		
+			<div class="field">
+				<%= f.password_field :password, autocomplete: "current-password", placeholder: "Password" %>
+			</div>
+		
+			<% if devise_mapping.rememberable? %>
+			<div class="field" id="rme-container">
+				<%= f.check_box :remember_me %>
+				<%= f.label :remember_me %>
+			</div>
+			<% end %>
+		
+			<div class="actions">
+				<%= f.submit "Log in" %>
+			</div>
+			<% end %>
+		
+			<%= render "users/shared/links" %>
+
+			<% else %>
+			<%= link_to dashboard_path, class: 'login-button' do %>Go to App<% end %>
+			<%= link_to('Edit registration', edit_user_registration_path) %>
+			<%= link_to destroy_user_session_path, method: :delete do %>Log out<% end %>
+			<% end %>
+		</div>
+	</div>
+</section>

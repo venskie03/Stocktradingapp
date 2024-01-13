@@ -1,16 +1,29 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Stocktradingapp</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Stock Trading App of some sorts | Trading at your fingertips</title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%= stylesheet_path 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
 
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-    <%= javascript_importmap_tags %>
+    <%= javascript_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
   <body>
+    <%# Flash %>
+    <% unless flash.empty? %>
+    <div id='flash'>
+      <script type="text/javascript">
+          <% flash.each do |f| %>
+            <% type = f[0].to_s.gsub('alert', 'error').gsub('notice', 'success') %>
+            toastr['<%= type %>']('<%= f[1] %>', '', { closeButton: true, progressBar: true, newestOnTop: false, positionClass: 'toast-bottom-right' });    
+          <% end %>
+      </script>
+    </div>
+    <% end %>
+    
+    <%= render "layouts/header" %>
     <%= yield %>
   </body>
 </html>

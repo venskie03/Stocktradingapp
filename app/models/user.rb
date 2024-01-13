@@ -1,4 +1,9 @@
 class User < ApplicationRecord
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :validatable, :confirmable
+         
   has_many :user_stocks, dependent: :destroy
   has_many :stocks, through: :user_stocks
   has_many :orders, dependent: :destroy
@@ -10,10 +15,6 @@ class User < ApplicationRecord
            }, dependent: :destroy,
            inverse_of: :buyer
 
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable, :confirmable
   after_create :send_admin_mail
   after_update :send_admin_confirmation
 

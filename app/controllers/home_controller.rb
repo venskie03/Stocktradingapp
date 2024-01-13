@@ -1,6 +1,5 @@
-class DashboardController < ApplicationController
-    def index
-      @user_stocks = current_user.user_stocks
-    end
+class HomeController < ApplicationController
+  skip_before_action :authenticate_user!, only: %i[index]
+  def index
   end
-  
+end
