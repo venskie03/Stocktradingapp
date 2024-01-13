@@ -111,7 +111,7 @@ class Order < ApplicationRecord
     def create_transaction(buyer, seller, stock, price, quantity)
       TransactionRecord.create!(stock_id: stock.id,
                                 buyer_id: buyer.id,
-                                broker_id: seller.id,
+                                seller_id: seller.id,
                                 price: price,
                                 quantity: quantity)
     end
