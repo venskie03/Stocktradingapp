@@ -16,14 +16,20 @@ class User < ApplicationRecord
            inverse_of: :buyer
 
   after_create :send_admin_mail
+
   after_update :send_admin_confirmation
+
+
+  enum role: {user: 0, admin: 1}
+
+  # broker_status
+  enum broker_status: { application_pending: 0, pending_approval: 1, approved: 2 }
+
 
   # Validations
   validates :email, presence: true,
                     uniqueness: true
   validates :username, presence: true
-  validates :firstname, presence: true
-  validates :lastname, presence: true
   validates :role, presence: true
   validates :balance, numericality: { greater_than_or_equal_to: 0 }
 
@@ -44,12 +50,19 @@ class User < ApplicationRecord
   end
 
   private
+  def register_as_broker
+  self.update(broker_status: :application_pending)
+  end
+  def send_broker_confirmation
+    ApplicationMailer.broker_confirmation_email(self).deliver_later
+  end
 
   def send_admin_mail
     if user_status == 'pending_approval'
       UserMailer.send_pending_admin_email(self).deliver_later
+
     else
-      UserMailer.send_welcome_email(self).deliver_later
+      ApplicationMailer.send_welcome_email(self).deliver_later
     end
   end
 
