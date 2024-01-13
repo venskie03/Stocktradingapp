@@ -6,7 +6,7 @@ class User < ApplicationRecord
            lambda { |user|
              # Removes default where clause of searching for user_id
              # Since user_id does not exist, cannot create through User.find(n).transaction_records.create!()
-             unscope(:where).where(broker: user).or(where(buyer: user))
+             unscope(:where).where(buyer: user)
            }, dependent: :destroy,
            inverse_of: :buyer
 
@@ -14,14 +14,16 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable, :confirmable
-  after_create :register_as_broker
   after_create :send_admin_mail
-  after_update :send_broker_confirmation
+
+  after_update :send_admin_confirmation
+
 
   enum role: {user: 0, admin: 1}
 
   # broker_status
   enum broker_status: { application_pending: 0, pending_approval: 1, approved: 2 }
+
 
   # Validations
   validates :email, presence: true,
@@ -31,7 +33,7 @@ class User < ApplicationRecord
   validates :balance, numericality: { greater_than_or_equal_to: 0 }
 
   # Role Inheritance using CanCanCan
-  ROLES = %w[buyer broker admin].freeze
+  ROLES = %w[buyer admin].freeze
 
   def sufficient_balance?(amount)
     balance >= amount
@@ -55,8 +57,9 @@ class User < ApplicationRecord
   end
 
   def send_admin_mail
-    if broker_status == 'pending_approval'
-      ApplicationMailer.send_pending_broker_email(self).deliver_later
+    if user_status == 'pending_approval'
+      UserMailer.send_pending_admin_email(self).deliver_later
+
     else
       ApplicationMailer.send_welcome_email(self).deliver_later
     end

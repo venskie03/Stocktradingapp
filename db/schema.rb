@@ -41,13 +41,13 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_11_134223) do
   create_table "transaction_records", force: :cascade do |t|
     t.bigint "stock_id", null: false
     t.bigint "buyer_id", null: false
-    t.bigint "broker_id", null: false
+    t.bigint "seller_id", null: false
     t.decimal "price", precision: 8, scale: 2
     t.integer "quantity"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["broker_id"], name: "index_transaction_records_on_broker_id"
     t.index ["buyer_id"], name: "index_transaction_records_on_buyer_id"
+    t.index ["seller_id"], name: "index_transaction_records_on_seller_id"
     t.index ["stock_id"], name: "index_transaction_records_on_stock_id"
   end
 
@@ -84,6 +84,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_11_134223) do
   end
 
   add_foreign_key "transaction_records", "stocks"
-  add_foreign_key "transaction_records", "users", column: "broker_id"
   add_foreign_key "transaction_records", "users", column: "buyer_id"
+  add_foreign_key "transaction_records", "users", column: "seller_id"
 end
