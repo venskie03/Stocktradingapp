@@ -1,0 +1,13 @@
+<h1>All Users</h1>
+<% @users.each do |user| %>
+  <div>
+    <p>User: <%= user.username %></p>
+    <p>Email: <%= user.email %></p>
+    <p>Status: <%= user.broker_status %></p>
+    <% if user.confirmed? %>
+      <p>Account Confirmed</p>
+    <% else %>
+      <p>Account Not Confirmed</p>
+    <% end %>
+  </div>
+<% end %>

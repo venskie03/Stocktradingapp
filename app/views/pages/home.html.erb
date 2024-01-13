@@ -1,10 +1,21 @@
 <% if current_user %>
-  <p>Hello <%= current_user.username %></p>
-  <p>Balance: <%= current_user.balance %></p>
-  <p>Account: <%= current_user.role %></p>
+  <% if !current_user.confirmed? %>
+    <div class="alert alert-warning">
+      Your account is not yet confirmed. Please wait for approval.
+        <%= link_to 'Sign Out', destroy_user_session_path, 'data-turbo-method': :delete %>
+    </div>
+  <% else %>
+    <p>Hello <%= current_user.username %></p>
+    <p>Balance: <%= current_user.balance %></p>
+    <p>Account: <%= current_user.role %></p>
     <%= link_to 'Sign Out', destroy_user_session_path, 'data-turbo-method': :delete %>
+  <% end %>
 <% else %>
   <p>YOU ARE NOT SIGNED IN</p>
   <%= link_to 'Sign Up!', new_user_registration_path %>
-  <%= link_to 'Sign IN!', new_user_session_path %>
+  <%= link_to 'Sign In!', new_user_session_path %>
+<% end %>
+
+<% if current_user && current_user.admin? %>
+  <%= render 'admin_page' %>
 <% end %>

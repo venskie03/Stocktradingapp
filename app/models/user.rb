@@ -30,6 +30,11 @@ class User < ApplicationRecord
   validates :role, presence: true
   validates :balance, numericality: { greater_than_or_equal_to: 0 }
 
+  protected
+  def active_for_authentication?
+    super || !confirmed?
+  end
+
   # Role Inheritance using CanCanCan
   ROLES = %w[buyer broker admin].freeze
 
