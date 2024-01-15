@@ -17,5 +17,8 @@
 <% end %>
 
 <% if current_user && current_user.admin? %>
+  <div class="add_user">
+  <button><%=link_to 'Add User', create_new_user_path%></button>
+</div>
   <%= render 'admin_page' %>
 <% end %>
