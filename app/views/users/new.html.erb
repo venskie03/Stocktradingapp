@@ -1,0 +1,42 @@
+<h1>Register</h1>
+<div class="adding_user_form">
+  <div class="container bg-[#34495E] w-full mt-24 p-12 m-auto rounded-lg max-h-full shadow-lg shadow-gray-400">
+    <%= form_with(model: @user, url: create_new_user_path, method: :post) do |form| %>
+      <div class="mb-4">
+        <%= form.label :username, class: "text-white" %>
+        <%= form.text_field :username, class: "w-full p-2 rounded-md" %>
+      </div>
+      <div class="mb-4">
+        <%= form.label :email, class: "text-white" %>
+        <%= form.email_field :email, class: "w-full p-2 rounded-md" %>
+      </div>
+      <div class="mb-4">
+        <%= form.label :password, class: "text-white" %>
+        <%= form.password_field :password, class: "w-full p-2 rounded-md" %>
+      </div>
+      <div class="mb-4">
+        <%= form.label :password_confirmation, class: "text-white" %>
+        <%= form.password_field :password_confirmation, class: "w-full p-2 rounded-md" %>
+      </div>
+      <div class="mb-4">
+        <%= form.label :balance, class: "text-white" %>
+        <%= form.number_field :balance, class: "w-full p-2 rounded-md" %>
+      </div>
+      <div class="mb-4">
+        <%= form.submit 'Create User', class: "bg-blue-500 text-white px-4 py-2 rounded-md" %>
+      </div>
+    <% end %>
+    <% if flash[:notice].present? %>
+      <div class="display-notice text-green-500">
+        <%= flash[:notice] %>
+      </div>
+    <% end %>
+    <div class="errors text-white">
+      <% if flash[:error].present? %>
+        <% flash[:error].each do |error| %>
+          <p><%= error %></p>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>

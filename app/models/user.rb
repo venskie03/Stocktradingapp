@@ -18,6 +18,15 @@ class User < ApplicationRecord
 
   after_update :send_admin_confirmation
 
+  before_create :skip_confirmation
+
+  def active_for_authentication?
+    super || application_pending?
+  end
+
+  def inactive_message
+    confirmed? ? super : :not_confirmed
+  end
 
   enum role: {user: 0, admin: 1}
 
@@ -31,11 +40,6 @@ class User < ApplicationRecord
   validates :username, presence: true
   validates :role, presence: true
   validates :balance, numericality: { greater_than_or_equal_to: 0 }
-
-  protected
-  def active_for_authentication?
-    super || !confirmed?
-  end
 
   # Role Inheritance using CanCanCan
   ROLES = %w[buyer admin].freeze
@@ -57,17 +61,22 @@ class User < ApplicationRecord
   def register_as_broker
   self.update(broker_status: :application_pending)
   end
-  def send_broker_confirmation
+  def send_admin_confirmation
     ApplicationMailer.broker_confirmation_email(self).deliver_later
   end
 
+  def skip_confirmation
+    self.confirmed_at = Time.current
+  end
+
   def send_admin_mail
-    if user_status == 'pending_approval'
+    if user_stocks == 'pending_approval'
       UserMailer.send_pending_admin_email(self).deliver_later
 
     else
       ApplicationMailer.send_welcome_email(self).deliver_later
     end
+
   end
 
 end

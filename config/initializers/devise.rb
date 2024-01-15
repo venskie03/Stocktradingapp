@@ -17,7 +17,7 @@ Devise.setup do |config|
   # config.secret_key = '9b5b562df3ee3f3f4c6563624d88e4d081c71ed806b042686763639b37d427e4027b1a24fef6301beedf13c0f39a0e0e514837b40fb502c48acce8a53630f3de'
 
   config.navigational_formats = ['"/"', :html, :turbo_stream]
-
+ 
 
   # ==> Controller configuration
   # Configure the parent class to the devise controllers.

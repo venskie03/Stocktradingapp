@@ -1,9 +1,9 @@
 <% if current_user %>
-  <% if !current_user.confirmed? %>
+  <% if current_user.application_pending? %>
     <div class="alert alert-warning">
       Your account is not yet confirmed. Please wait for approval.
-        <%= link_to 'Sign Out', destroy_user_session_path, 'data-turbo-method': :delete %>
     </div>
+    <%= link_to 'Sign Out', destroy_user_session_path, 'data-turbo-method': :delete %>
   <% else %>
     <p>Hello <%= current_user.username %></p>
     <p>Balance: <%= current_user.balance %></p>

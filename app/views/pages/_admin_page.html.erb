@@ -1,13 +1,46 @@
-<h1>All Users</h1>
-<% @users.each do |user| %>
-  <div>
-    <p>User: <%= user.username %></p>
-    <p>Email: <%= user.email %></p>
-    <p>Status: <%= user.broker_status %></p>
-    <% if user.confirmed? %>
-      <p>Account Confirmed</p>
-    <% else %>
-      <p>Account Not Confirmed</p>
-    <% end %>
-  </div>
+<div class="overflow-x-auto">
+  <table class="min-w-full divide-y divide-gray-200">
+    <thead>
+      <tr>
+        <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            Username
+        </th>
+        <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+          Email
+        </th>
+       <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+          Balance
+        </th>
+        <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+          Operation
+        </th>
+      </tr>
+    </thead>
+    <tbody class="bg-white divide-y divide-gray-200">
+      <tr>
+        <td class="px-6 py-4 whitespace-nowrap">
+          John Doe
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap">
+          johndoe@example.com
+        </td>
+        <!-- Add more table cells for each row -->
+      </tr>
+      <!-- Add more table rows as needed -->
+    </tbody>
+  </table>
+</div>
+
+<div class="admin-cont">
+  <div class="add_user">
+  <button><%=link_to 'Add User', create_new_user_path%></button>
+</div>
+  <% @users = User.application_pending %>
+<% @users.each do |user| %> <br>
+ <%= user.username %><br/>
+  <%= user.email %><br/>
+  <%= user.broker_status%>
+  <%= user.confirmation_token%>
+  <%= button_to 'Approve', approve_user_path(user), method: :patch, data: { confirm: 'Are you sure?' } %>
 <% end %>
+</div>
