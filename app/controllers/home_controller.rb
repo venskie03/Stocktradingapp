@@ -7,15 +7,8 @@
     @users = User.where(broker_status: 'application_pending')
   end
 
-
-
-
   private
-
   def set_users
     @users = User.all
   end
-
-
-
     end

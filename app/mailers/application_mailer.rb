@@ -2,6 +2,7 @@ class ApplicationMailer < ActionMailer::Base
   default from: "from@example.com"
 
   def broker_confirmation_email(user)
+    @user = user
     mail(to: user.email, subject: "Broker Confirmation Email")
   end
 
@@ -16,6 +17,11 @@ class ApplicationMailer < ActionMailer::Base
   def account_approved(user)
     @user = user
     mail(to: @user.email, subject: "Your Account is Successfully Approved")
+  end
+
+  def account_created(user)
+    @user = user
+    mail(to: @user.email, subject: "Your Account is Successfully Created")
   end
 
   def account_created(user)

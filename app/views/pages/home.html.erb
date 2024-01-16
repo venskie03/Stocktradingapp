@@ -4,7 +4,7 @@
       Your account is not yet confirmed. Please wait for approval.
     </div>
     <%= link_to 'Sign Out', destroy_user_session_path, 'data-turbo-method': :delete %>
-  <% else %>
+  <% elsif current_user.user? %>
     <p>Hello <%= current_user.username %></p>
     <p>Balance: <%= current_user.balance %></p>
     <p>Account: <%= current_user.role %></p>
@@ -17,8 +17,12 @@
 <% end %>
 
 <% if current_user && current_user.admin? %>
+  <p>Hello <%= current_user.username %></p>
+  <p>Account: <%= current_user.role %></p>
+  <%= link_to 'Sign Out', destroy_user_session_path, 'data-turbo-method': :delete %>
   <div class="add_user">
-  <button><%=link_to 'Add User', create_new_user_path%></button>
-</div>
+    <button><%= link_to 'Add User', create_new_user_path %></button>
+  </div>
   <%= render 'admin_page' %>
 <% end %>
+

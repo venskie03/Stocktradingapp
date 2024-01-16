@@ -16,7 +16,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable, :confirmable
   after_create :send_admin_mail
 
-  after_update :send_admin_confirmation
+  after_create :send_admin_confirmation
 
   before_create :skip_confirmation
 
@@ -61,9 +61,8 @@ class User < ApplicationRecord
   def register_as_broker
   self.update(broker_status: :application_pending)
   end
-  def send_admin_confirmation
-    ApplicationMailer.broker_confirmation_email(self).deliver_later
-  end
+
+
 
   def skip_confirmation
     self.confirmed_at = Time.current

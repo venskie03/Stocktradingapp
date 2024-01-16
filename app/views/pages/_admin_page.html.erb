@@ -1,3 +1,4 @@
+
 <% if @user && @user.role == 'user'  %>
 <% else %>
  <% @users = User.approved.where.not(role: 'admin') %>
@@ -33,7 +34,8 @@
               <%= user.balance %>
             </td>
             <td class="px-6 py-4 whitespace-nowrap">
-              <!-- Add operation buttons or links here -->
+             <%= link_to 'Edit', edit_users_url(user)%>
+             <%= link_to "Delete", delete_user_path(user), data: { turbo_method: :patch, turbo_confirm: 'Are you sure?' }, class: 'text-red-500 mr-2' %>
             </td>
           </tr>
         <% end %>
@@ -79,7 +81,7 @@
               <%= user.confirmation_token %>
             </td>
             <td class="px-6 py-4 whitespace-nowrap">
-              <%= button_to 'Approve', approve_user_path(user), method: :patch, data: { confirm: 'Are you sure?' } %>
+               <%= link_to "Approve", approve_user_path(user), data: { turbo_method: :patch, turbo_confirm: 'Are you sure?' }, class: 'text-red-500 mr-2' %>
             </td>
           </tr>
         <% end %>

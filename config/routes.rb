@@ -5,6 +5,9 @@ Rails.application.routes.draw do
   patch 'dashboard/approve/:id', to: 'dashboard#approve', as: :approve_user
   get '/new_user', to: 'users#new', as: 'create_new_user'
   post '/new_user' => "users#create"
+  get '/users/:id/edit', to: "users#edit", as: 'edit_users'
+  post '/users/:id/edit', to: "users#update"
+  patch '/delete/:id', to: 'users#destroy', as: :delete_user
 
   devise_for :users, controllers: {registrations: 'users/registrations'}
 
