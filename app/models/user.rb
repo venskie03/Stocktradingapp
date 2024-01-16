@@ -17,7 +17,7 @@ class User < ApplicationRecord
 
   # after_create :send_admin_mail
 
-  # after_update :send_admin_confirmation
+  after_create :send_admin_confirmation
 
 
   enum role: {user: 0, admin: 1}
@@ -47,7 +47,6 @@ class User < ApplicationRecord
   end
 
   private
-
 
   def send_admin_mail
     if user_status == 'pending_approval'

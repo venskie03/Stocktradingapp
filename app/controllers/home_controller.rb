@@ -9,7 +9,6 @@ class HomeController < ApplicationController
   end
 
   private
-
   def set_users
     @users = User.all
   end

@@ -18,14 +18,15 @@ class ApplicationController < ActionController::Base
         @devise_mapping ||= Devise.mappings[:user]
     end
 
-    def after_sign_in_path_for(*)
-        if current_user.role? :admin
-            admin_dashboard_index_path
-        else
-            dashboard_index_path
-        end
+    def after_sign_in_path_for(resource_or_scope)
+      if resource_or_scope.is_a?(User) && !resource_or_scope.confirmed?
+        flash[:notice] = 'Your account is not yet confirmed. Please wait for approval.'
+        root_path
+      else
+        super
+      end
     end
-
+  
     protected
 
     def configure_permitted_parameters
@@ -33,3 +34,4 @@ class ApplicationController < ActionController::Base
         devise_parameter_sanitizer.permit(:account_update, keys: [:firstname, :lastname, :role, :email, :password, :password_confirmation, :current_password])
       end
 end
+
