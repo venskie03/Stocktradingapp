@@ -1,0 +1,26 @@
+<div class="body-container">
+    <div class="stock-dashboard-container">
+    
+    <h1>Stocks</h1>
+    
+    <div class= "portfolio-cards">
+          <% @stocks.each do |stock| %>
+           <%= link_to stock_path(stock) do %>
+            <div class="p-card">
+              <h5 class="p-card-title"><%= stock.ticker %></h5>
+              <h6 class="p-card-subtitle mb-2 text-muted"><%= stock.company_name%></h6>
+              <p class="p-card-text">Last bought at: Php <%= number_with_precision(stock.last_transaction_price, precision: 2) %></p>
+              <p class="p-card-text">Stock quantity: <%= number_with_delimiter(stock.quantity) %></p>
+            </div>
+            <% end %>
+          <% end %>
+        </div>
+    
+    <br>
+    
+    <% if can? :create, Stock %>
+      <%= link_to 'New Stock', new_stock_path %>
+    <% end %>
+    </div>
+    </div>
+    

@@ -1,17 +1,10 @@
 Rails.application.routes.draw do
-  get 'transaction/index'
-  root 'pages#home'
-  get 'pages/users'
-  patch 'dashboard/approve/:id', to: 'dashboard#approve', as: :approve_user
-  get '/new_user', to: 'users#new', as: 'create_new_user'
-  post '/new_user' => "users#create"
 
-  devise_for :users, controllers: {registrations: 'users/registrations'}
-
-
-
-
-
+  devise_for :users, controllers: {
+    registrations: 'users/registrations',
+    sessions: 'users/sessions',
+    passwords: 'users/passwords'
+  }
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -20,4 +13,20 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+
+  root 'home#index'
+  get '/home',          to: 'home#index'
+  get '/dashboard',     to: 'dashboard#index'
+  get '/transactions',  to: 'transaction_records#index'
+  get 'pages/users'
+
+  patch 'dashboard/approve/:id', to: 'dashboard#approve', as: :approve_user
+  get '/new_user', to: 'users#new', as: 'create_new_user'
+  post '/new_user' => "users#create"
+
+
+
+  resources :stocks do
+    resources :orders
+  end
 end

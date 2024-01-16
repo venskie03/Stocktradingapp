@@ -1,4 +1,9 @@
 class User < ApplicationRecord
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :validatable, :confirmable
+         
   has_many :user_stocks, dependent: :destroy
   has_many :stocks, through: :user_stocks
   has_many :orders, dependent: :destroy
@@ -10,28 +15,12 @@ class User < ApplicationRecord
            }, dependent: :destroy,
            inverse_of: :buyer
 
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable, :confirmable
-  after_create :send_admin_mail
+  # after_create :send_admin_mail
 
-  after_update :send_admin_confirmation
+  # after_update :send_admin_confirmation
 
-  before_create :skip_confirmation
-
-  def active_for_authentication?
-    super || application_pending?
-  end
-
-  def inactive_message
-    confirmed? ? super : :not_confirmed
-  end
 
   enum role: {user: 0, admin: 1}
-
-  # broker_status
-  enum broker_status: { application_pending: 0, pending_approval: 1, approved: 2 }
 
 
   # Validations
@@ -58,25 +47,15 @@ class User < ApplicationRecord
   end
 
   private
-  def register_as_broker
-  self.update(broker_status: :application_pending)
-  end
-  def send_admin_confirmation
-    ApplicationMailer.broker_confirmation_email(self).deliver_later
-  end
 
-  def skip_confirmation
-    self.confirmed_at = Time.current
-  end
 
   def send_admin_mail
-    if user_stocks == 'pending_approval'
+    if user_status == 'pending_approval'
       UserMailer.send_pending_admin_email(self).deliver_later
 
     else
       ApplicationMailer.send_welcome_email(self).deliver_later
     end
-
   end
 
 end

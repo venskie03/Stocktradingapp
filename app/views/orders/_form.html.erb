@@ -1,0 +1,27 @@
+<%= form_with model: [@stock, @order] do |f| %>
+  <% if @order.errors.any? %>
+    <ul>
+    <% @order.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+    </ul>
+    <% end %>
+  <% end %>
+
+  <div>
+    <%= f.label :transaction_type %>
+    <br>
+    <%= f.select :transaction_type, options_for_select(["buy", "sell"], disabled: @disabled) %>
+  </div>
+  
+  <div>
+    <%= f.label :price %>
+    <%= f.number_field :price, step: 0.01, min: 0.01 %>
+  </div>
+  <div>
+    <%= f.label :quantity %>
+    <%= f.number_field :quantity, step: 1, min: 1 %>
+  </div>
+  <div>
+    <%= f.submit %>
+  </div>
+<% end %>
