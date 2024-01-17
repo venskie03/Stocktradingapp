@@ -2,12 +2,12 @@ class DashboardController < ApplicationController
   def index
     @user_stocks = current_user.user_stocks
   end
-  
+
   def approve
     user = User.find(params[:id])
     if user
       user.confirmed_at = Time.current
-      user.broker_status = :approved
+      user.user_status = :approved
       if user.save
         UserMailer.account_approved(user).deliver_now
         flash[:success] = "User #{user.username}'s account has been approved."

@@ -1,10 +1,10 @@
 <% if current_user %>
-  <% if current_user.application_pending? %>
+  <% if current_user.pending_approval? && current_user.role == "user" %>
     <div class="alert alert-warning">
       Your account is not yet confirmed. Please wait for approval.
     </div>
     <%= link_to 'Sign Out', destroy_user_session_path, 'data-turbo-method': :delete %>
-  <% elsif current_user.user? %>
+  <% elsif current_user.username? %>
     <p>Hello <%= current_user.username %></p>
     <p>Balance: <%= current_user.balance %></p>
     <p>Account: <%= current_user.role %></p>
@@ -16,7 +16,7 @@
   <%= link_to 'Sign In!', new_user_session_path %>
 <% end %>
 
-<% if current_user && current_user.admin? %>
+<% if current_user && current_user.role == "admin" %>
   <p>Hello <%= current_user.username %></p>
   <p>Account: <%= current_user.role %></p>
   <%= link_to 'Sign Out', destroy_user_session_path, 'data-turbo-method': :delete %>

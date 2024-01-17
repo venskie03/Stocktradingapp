@@ -3,6 +3,20 @@
   <div class="container bg-[#34495E] w-full mt-24 p-12 m-auto rounded-lg max-h-full shadow-lg shadow-gray-400">
     <%= form_with(model: @user, url: create_new_user_path, method: :post) do |form| %>
       <div class="mb-4">
+        <%= form.label :firstname, class: "text-white" %>
+        <%= form.text_field :firstname, class: "w-full p-2 rounded-md" %>
+      </div>
+        <div class="mb-4">
+        <%= form.label :lastname, class: "text-white" %>
+        <%= form.text_field :lastname, class: "w-full p-2 rounded-md" %>
+      </div>
+
+       <div class="field" id="role-container">
+        <%= form.label :role, :class => "role-label" %><br />
+        <%= form.select :role, ["user", "admin"] %>
+      </div>
+      
+      <div class="mb-4">
         <%= form.label :username, class: "text-white" %>
         <%= form.text_field :username, class: "w-full p-2 rounded-md" %>
       </div>

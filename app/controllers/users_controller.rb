@@ -1,5 +1,7 @@
 class UsersController < ApplicationController
   def index
+    @user = User.all
+    @pending_users = User.find_by(user_status: "pending_approval")
   end
 
   def show
@@ -21,7 +23,7 @@ class UsersController < ApplicationController
       redirect_to edit_users_path
     end
   end
-  
+
   def destroy
     @user = User.find(params[:id])
     @user.destroy
@@ -30,6 +32,9 @@ class UsersController < ApplicationController
 
   def create
     user_params = {
+      firstname: params[:firstname],
+      lastname: params[:lastname],
+      role: params[:role],
       username: params[:username],
       email: params[:email],
       password: params[:password],
@@ -37,8 +42,9 @@ class UsersController < ApplicationController
       balance: params[:balance]
     }
     @user = User.new(user_params)
+    @user.skip_confirmation!
     if @user.save
-      @user.update(confirmed_at: Time.current, broker_status: :approved)
+      @user.update(confirmed_at: Time.current, user_status: :approved)
       UserMailer.account_created(@user).deliver_now
       redirect_to create_new_user_path, notice: 'User created successfully'
     else
@@ -47,6 +53,6 @@ class UsersController < ApplicationController
   end
 private
 def edit_user
-  params.require(:user).permit(:username, :email, :balance)
+  params.require(:user).permit(:firstname, :lastname, :username, :email, :balance)
 end
 end

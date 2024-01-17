@@ -34,4 +34,8 @@ class UserMailer < ApplicationMailer
       @user = user
       mail(to: @user.email, subject: 'Your Account is Successfully Updated')
     end
+    def account_signup(user)
+      @user = user
+      mail(to: @user.email, subject: 'Your Account is Successfully Created')
+    end
 end

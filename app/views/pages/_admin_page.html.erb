@@ -1,7 +1,7 @@
 
 <% if @user && @user.role == 'user'  %>
 <% else %>
- <% @users = User.approved.where.not(role: 'admin') %>
+ <% @users = User.where.not(role: 'admin').where.not(user_status: 'pending_approval') %>
   <div class="overflow-x-auto">
     <table class="min-w-full divide-y divide-gray-200">
       <h1>APPROVED USERS</h1>
@@ -65,7 +65,7 @@
         </tr>
       </thead>
       <tbody class="bg-white divide-y divide-gray-200">
-        <% @users = User.application_pending %>
+        <% @users = User.where(user_status: "pending_approval").where(role: "user") %>
         <% @users.each do |user| %>
           <tr>
             <td class="px-6 py-4 whitespace-nowrap">
@@ -75,13 +75,11 @@
               <%= user.email %>
             </td>
             <td class="px-6 py-4 whitespace-nowrap">
-              <%= user.broker_status %>
+              <%= user.user_status %>
             </td>
             <td class="px-6 py-4 whitespace-nowrap">
-              <%= user.confirmation_token %>
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap">
-               <%= link_to "Approve", approve_user_path(user), data: { turbo_method: :patch, turbo_confirm: 'Are you sure?' }, class: 'text-red-500 mr-2' %>
+            <%= link_to "Approve", approve_user_path(user), method: :patch, data: { turbo_method: :patch, turbo_confirm: 'Are you sure?' }, class: 'text-red-500 mr-2' %>
+
             </td>
           </tr>
         <% end %>
@@ -89,3 +87,4 @@
     </table>
   </div>
 </div>
+

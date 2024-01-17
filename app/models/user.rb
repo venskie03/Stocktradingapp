@@ -3,7 +3,7 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable, :confirmable
-         
+
   has_many :user_stocks, dependent: :destroy
   has_many :stocks, through: :user_stocks
   has_many :orders, dependent: :destroy
@@ -17,10 +17,7 @@ class User < ApplicationRecord
 
   # after_create :send_admin_mail
 
-  after_create :send_admin_confirmation
-
-
-  enum role: {user: 0, admin: 1}
+  after_create :notify_user_if_created_by_admin
 
 
   # Validations
@@ -37,6 +34,14 @@ class User < ApplicationRecord
     balance >= amount
   end
 
+  def pending_approval?
+    user_status == 'pending_approval'
+  end
+
+  def active_for_authentication?
+    super || user_status == 'pending_approval'
+  end
+
   def change_balance_by(amount)
     # byebug
     update(balance: balance + amount)
@@ -45,15 +50,12 @@ class User < ApplicationRecord
   def role?(base_role)
     ROLES.index(base_role.to_s) <= ROLES.index(role)
   end
-
   private
 
-  def send_admin_mail
-    if user_status == 'pending_approval'
-      UserMailer.send_pending_admin_email(self).deliver_later
 
-    else
-      ApplicationMailer.send_welcome_email(self).deliver_later
+  def notify_user_if_created_by_admin
+    if role == "admin"
+  UserMailer.account_created_by_admin_email(self).deliver_now
     end
   end
 

@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  devise_scope :user do
+    get '/users/sign_out' => 'devise/sessions#destroy'
+ end
 
   devise_for :users, controllers: {
     registrations: 'users/registrations',
@@ -14,15 +17,18 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
 
-  root 'home#index'
+  root 'pages#home'
   get '/home',          to: 'home#index'
   get '/dashboard',     to: 'dashboard#index'
   get '/transactions',  to: 'transaction_records#index'
   get 'pages/users'
 
-  patch 'dashboard/approve/:id', to: 'dashboard#approve', as: :approve_user
+  get 'dashboard/approve/:id', to: 'dashboard#approve', as: 'approve_user'
   get '/new_user', to: 'users#new', as: 'create_new_user'
   post '/new_user' => "users#create"
+  get '/edit/:id', to: "users#edit", as: 'edit_users'
+  post '/edit/:id', to: "users#update"
+  get '/delete/:id', to: "users#destroy", as: 'delete_user'
 
 
 
