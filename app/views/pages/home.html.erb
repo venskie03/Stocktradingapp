@@ -4,7 +4,7 @@
       Your account is not yet confirmed. Please wait for approval.
     </div>
     <%= link_to 'Sign Out', destroy_user_session_path, 'data-turbo-method': :delete %>
-  <% elsif current_user.username? %>
+  <% elsif current_user.username? && current_user.role == "user" %>
     <p>Hello <%= current_user.username %></p>
     <p>Balance: <%= current_user.balance %></p>
     <p>Account: <%= current_user.role %></p>
