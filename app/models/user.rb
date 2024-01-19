@@ -44,6 +44,10 @@ class User < ApplicationRecord
   def role?(base_role)
     ROLES.index(base_role.to_s) <= ROLES.index(role)
   end
+
+  def pending_approval?
+    !confirmed?
+  end
   
   def admin?
     role == "admin"

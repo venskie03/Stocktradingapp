@@ -132,8 +132,9 @@ class Order < ApplicationRecord
     end
   
     def sell_quantity_cannot_exceed_user_stocks
-      return unless transaction_type == 'sell' && quantity > user.user_stocks.find_by(stock_id: stock_id)[:total_shares]
-  
+      user_stock = user.user_stocks.find_by(stock_id: stock_id)
+      return unless transaction_type == 'sell' && user_stock && quantity > user_stock.total_shares 
+      
       errors.add(:quantity, 'Insufficient user stocks to sell.')
     end
   

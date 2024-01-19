@@ -20,7 +20,7 @@ Rails.application.routes.draw do
   root 'pages#home'
   get '/home',          to: 'home#index'
   get '/dashboard',     to: 'dashboard#index'
-  get '/transactions',  to: 'transaction_records#index'
+  get '/transactions',  to: 'transaction#index'
   get 'pages/users'
 
   get 'dashboard/approve/:id', to: 'dashboard#approve', as: 'approve_user'

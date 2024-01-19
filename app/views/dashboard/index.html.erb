@@ -2,8 +2,7 @@
     <div class= "portfolio-container">
     <h2>Hello <%= current_user.username %>!</h2>
       <div class= "user-info"> 
-        <div id="user-icon"><%= image_tag("figma_icons/account_circle.png", alt: "trending up icon") %></div>
-        <div id="wallet-container"><h5>Your Wallet</h5> <h3>Php <%= number_with_precision(current_user.balance, precision: 2, delimiter: ',') %><h3></div>
+        <div id="wallet-container"><h5>Your Wallet</h5> <h3>P <%= number_with_precision(current_user.balance, precision: 2, delimiter: ',') %><h3></div>
       </div>
       <h1 id="my-portfolio"> My Portfolio </h1>
   
