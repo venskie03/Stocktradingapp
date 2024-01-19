@@ -20,12 +20,12 @@ class OrdersController < ApplicationController
   
       if @order.save
         flash.notice = 'Order was successfully added.'
-        # Check if transaction succeeded
+        
         flash.notice = 'Order was successfully executed.' if @order.quantity != @order_quantity_copy
         redirect_to stock_path(@stock)
       else
         flash.alert = 'Failed: Error in adding Order.'
-        redirect_to new_stock_order_path(@stock) # Render doesn't seem to render erorr messages
+        redirect_to new_stock_order_path(@stock)
       end
     end
   
