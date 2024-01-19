@@ -18,10 +18,10 @@
 
 <% if current_user && current_user.role == "admin" %>
   <p>Hello <%= current_user.username %></p>
-  <p>Account: <%= current_user.role %></p>
-  <%= link_to 'Sign Out', destroy_user_session_path, 'data-turbo-method': :delete %>
-  <div class="add_user">
-    <button><%= link_to 'Add User', create_new_user_path %></button>
+  <p class="mb-10">Account: <%= current_user.role %></p>
+  <%= link_to 'Sign Out', destroy_user_session_path, 'data-turbo-method': :delete, class: 'bg-black p-3 rounded-lg text-white' %>
+  <div class="add_user mt-10">
+    <button><%= link_to 'Add User', create_new_user_path, class: 'bg-black p-3 rounded-lg text-white' %></button>
   </div>
   <%= render 'admin_page' %>
 <% end %>

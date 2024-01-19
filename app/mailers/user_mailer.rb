@@ -41,4 +41,8 @@ class UserMailer < ApplicationMailer
       @user = user
       mail(to: @user.email, subject: 'Your Account is Successfully Created')
     end
+    def account_created_as_admin(user)
+      @user = user
+      mail(to: @user.email, subject: 'Your Account is Successfully Created')
+    end
 end

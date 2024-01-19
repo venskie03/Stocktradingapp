@@ -17,7 +17,7 @@ class User < ApplicationRecord
 
   # after_create :send_admin_mail
 
-  after_create :notify_user_if_created_by_admin
+
 
 
   # Validations
@@ -29,6 +29,8 @@ class User < ApplicationRecord
 
   # Role Inheritance using CanCanCan
   ROLES = %w[buyer admin].freeze
+
+
 
   def sufficient_balance?(amount)
     balance >= amount
@@ -50,13 +52,9 @@ class User < ApplicationRecord
   def role?(base_role)
     ROLES.index(base_role.to_s) <= ROLES.index(role)
   end
-  private
-
-
-  def notify_user_if_created_by_admin
-    if role == "admin"
-  UserMailer.account_created_by_admin_email(self).deliver_now
-    end
+  
+  def admin?
+    role == "admin"
   end
 
 end

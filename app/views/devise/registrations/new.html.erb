@@ -25,11 +25,15 @@
         <%= f.text_field :username, autocomplete: "username", placeholder: "Username", class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" %>
       </div>
 
-      <div class="mb-4">
-        <%= f.label :role, "Role", class: "block text-white text-sm font-bold mb-2" %>
-        <%= f.select :role, ["user", "admin"], {}, class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" %>
-      </div>
+   <div class="mb-4">
+    <%= f.label :role, "Role", class: "block text-white text-sm font-bold mb-2" %>
+    <%= f.select :role, ["user", "admin"], {}, { class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline", id: "user_role_select" } %>
+  </div>
 
+  <div id="admin_passcode_container" class="admin-role hidden">
+    <%= f.label :admin_passcode, "Admin Passcode", class: "block text-white text-sm font-bold mb-2" %>
+    <%= f.text_field :admin_passcode, autocomplete: "off", placeholder: "Enter Admin Passcode", class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" %>
+  </div>
       <div class="mb-4">
         <% if @minimum_password_length %>
           <em class="text-sm text-white">(<%= @minimum_password_length %> characters minimum)</em><br />
@@ -45,9 +49,29 @@
         <%= f.submit "Sign up", class: "w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
       </div>
     <% end %>
+    <% if flash[:alert].present? %>
+  <div class="alert alert-success">
+    <%= flash[:alert] %>
+  </div>
+<% end %>
+
   <p>Already Have an Account?</p>
   <%- if controller_name != 'sessions' %>
   <%= link_to "Log in", new_session_path(resource_name) %><br />
 <% end %>
   </div>
 </section>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+  const roleSelect = document.getElementById('user_role_select');
+  const adminPasscodeContainer = document.getElementById('admin_passcode_container');
+
+  roleSelect.addEventListener('change', function() {
+    if (roleSelect.value === 'admin') {
+      adminPasscodeContainer.classList.remove('hidden');
+    } else {
+      adminPasscodeContainer.classList.add('hidden');
+    }
+  });
+});
+</script>
