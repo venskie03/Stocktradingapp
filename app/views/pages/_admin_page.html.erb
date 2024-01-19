@@ -1,10 +1,18 @@
-
 <% if @user && @user.role == 'user'  %>
 <% else %>
- <% @users = User.where.not(role: 'admin').where.not(user_status: 'pending_approval') %>
-  <div class="overflow-x-auto">
-    <table class="min-w-full divide-y divide-gray-200">
-      <h1>APPROVED USERS</h1>
+  <% @users = User.where.not(role: 'admin').where.not(user_status: 'pending_approval').where.not(user_status: 'disapproved') %>
+     <caption class="text-xl font-bold mb-4">Approved Users</caption>
+     <% if flash[:success].present? %>
+  <div class="alert alert-success">
+    <%= flash[:success] %>
+  </div>
+<% end %>
+       <div class="flex mb-4">
+      <input type="text" id="approvedSearchInput" placeholder="Search by Username" class="border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 w-64">
+      <button onclick="searchApprovedUsers()" class="ml-2 px-4 py-2 bg-blue-500 text-white rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">Search</button>
+    </div>
+  <div class="overflow-x-auto h-96">
+    <table id="approvedUsersTable" class="min-w-full divide-y divide-gray-200">
       <thead>
         <tr>
           <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -34,8 +42,8 @@
               <%= user.balance %>
             </td>
             <td class="px-6 py-4 whitespace-nowrap">
-             <%= link_to 'Edit', edit_users_url(user)%>
-             <%= link_to "Delete", delete_user_path(user), data: { turbo_method: :patch, turbo_confirm: 'Are you sure?' }, class: 'text-red-500 mr-2' %>
+              <%= link_to 'Edit', edit_users_url(user), class: 'text-blue-500 mr-2' %>
+              <%= link_to "Delete", delete_user_path(user), data: { turbo_method: :patch, turbo_confirm: 'Are you sure?' }, class: 'text-red-500' %>
             </td>
           </tr>
         <% end %>
@@ -44,47 +52,92 @@
   </div>
 <% end %>
 
-<h1>Pending Users</h1>
-<div class="admin-cont">
-  <div class="overflow-x-auto">
-    <table class="min-w-full divide-y divide-gray-200">
-      <thead>
-        <tr>
-          <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-            Username
-          </th>
-          <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-            Email
-          </th>
-          <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-            Status
-          </th>
-          <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-            Action
-          </th>
-        </tr>
-      </thead>
-      <tbody class="bg-white divide-y divide-gray-200">
-        <% @users = User.where(user_status: "pending_approval").where(role: "user") %>
-        <% @users.each do |user| %>
-          <tr>
-            <td class="px-6 py-4 whitespace-nowrap">
-              <%= user.username %>
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap">
-              <%= user.email %>
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap">
-              <%= user.user_status %>
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap">
-            <%= link_to "Approve", approve_user_path(user), method: :patch, data: { turbo_method: :patch, turbo_confirm: 'Are you sure?' }, class: 'text-red-500 mr-2' %>
-
-            </td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
+<h1 class="text-xl font-bold mt-8">Pending Users</h1>
+<% if flash[:disapproved].present? %>
+  <div class="alert alert-success">
+    <%= flash[:disapproved] %>
   </div>
+<% end %>
+   <div class="flex mb-4">
+    <input type="text" id="pendingSearchInput" placeholder="Search by Username" class="border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 w-64">
+    <button onclick="searchPendingUsers()" class="ml-2 px-4 py-2 bg-blue-500 text-white rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">Search</button>
+  </div>
+<div class="overflow-x-auto h-96">
+  <table id="pendingUsersTable" class="min-w-full divide-y divide-gray-200">
+    <thead>
+      <tr>
+        <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+          Username
+        </th>
+        <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+          Email
+        </th>
+        <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+          Status
+        </th>
+        <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+          Action
+        </th>
+      </tr>
+    </thead>
+    <tbody class="bg-white divide-y divide-gray-200">
+      <% @users = User.where(user_status: "pending_approval").where(role: "user") %>
+      <% @users.each do |user| %>
+        <tr>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <%= user.username %>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <%= user.email %>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <%= user.user_status %>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <%= link_to "Approve", approve_user_path(user), method: :patch, data: { turbo_method: :patch, turbo_confirm: 'Are you sure?' }, class: 'text-green-500 mr-2' %>
+             <%= link_to "Disapprove", disapprove_user_path(user), method: :patch, data: { turbo_method: :patch, turbo_confirm: 'Are you sure?' }, class: 'text-red-500' %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 </div>
+<script>
+   function searchApprovedUsers() {
+    let input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("approvedSearchInput");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("approvedUsersTable");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td")[0]; // Assuming the username is in the first column
+      if (td) {
+        txtValue = td.textContent || td.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+  }
 
+   function searchPendingUsers() {
+    let input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("pendingSearchInput");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("pendingUsersTable");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td")[0]; // Assuming the username is in the first column
+      if (td) {
+        txtValue = td.textContent || td.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+  }
+</script>

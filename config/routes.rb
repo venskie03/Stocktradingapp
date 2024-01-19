@@ -24,6 +24,7 @@ Rails.application.routes.draw do
   get 'pages/users'
 
   get 'dashboard/approve/:id', to: 'dashboard#approve', as: 'approve_user'
+  get 'dashboard/disap/:id', to: 'dashboard#disapprove', as: 'disapprove_user'
   get '/new_user', to: 'users#new', as: 'create_new_user'
   post '/new_user' => "users#create"
   get '/edit/:id', to: "users#edit", as: 'edit_users'

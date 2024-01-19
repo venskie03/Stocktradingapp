@@ -25,7 +25,10 @@ class UserMailer < ApplicationMailer
       @user = user
       mail(to: @user.email, subject: 'Your Account is Successfully Approved')
     end
-
+    def account_disapproved(user)
+      @user = user
+      mail(to: @user.email, subject: 'Your Account is Successfully dispproved')
+    end
     def account_created(user)
       @user = user
       mail(to: @user.email, subject: 'Your Account is Successfully Created')

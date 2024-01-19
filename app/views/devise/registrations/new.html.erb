@@ -1,51 +1,53 @@
 <section class="forms-section">
-  <div class="forms-container">
-    		
-    <h2>Sign up</h2>
+  <div class="max-w-md mx-auto bg-[#0288D1] p-10 rounded-lg shadow-lg shadow-gray-500 mt-10 w-[90%]">
+    <h2 class="text-2xl font-bold text-white mb-4">Sign up</h2>
 
-    <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "" }) do |f| %>
       <%= render "devise/shared/error_messages", resource: resource %>
 
-      <div class="field">
-				<%= f.email_field :email, autocomplete: "email", placeholder: "Enter Email" %>
-			</div>
-
-      <div class="field">
-				<%= f.text_field :firstname, autocomplete: "firstname", placeholder: "First Name" %>
-			</div>
-
-      <div class="field">
-				<%= f.text_field :lastname, autocomplete: "lastname", placeholder: "Last Name" %>
-			</div>
-
-      <div class="field">
-				<%= f.text_field :username, autocomplete: "username", placeholder: "Username" %>
-			</div>
-
-      <div class="field" id="role-container">
-        <%= f.label :role, :class => "role-label" %><br />
-        <%= f.select :role, ["user", "admin"] %>
+      <div class="mb-4">
+        <%= f.label :email, class: "block text-white text-sm font-bold mb-2" %>
+        <%= f.email_field :email, autocomplete: "email", placeholder: "Enter Email", class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" %>
       </div>
-      
-      <div class="field">
+
+      <div class="mb-4">
+        <%= f.label :firstname, class: "block text-white text-sm font-bold mb-2" %>
+        <%= f.text_field :firstname, autocomplete: "firstname", placeholder: "First Name", class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" %>
+      </div>
+
+      <div class="mb-4">
+        <%= f.label :lastname, class: "block text-white text-sm font-bold mb-2" %>
+        <%= f.text_field :lastname, autocomplete: "lastname", placeholder: "Last Name", class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" %>
+      </div>
+
+      <div class="mb-4">
+        <%= f.label :username, class: "block text-white text-sm font-bold mb-2" %>
+        <%= f.text_field :username, autocomplete: "username", placeholder: "Username", class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" %>
+      </div>
+
+      <div class="mb-4">
+        <%= f.label :role, "Role", class: "block text-white text-sm font-bold mb-2" %>
+        <%= f.select :role, ["user", "admin"], {}, class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" %>
+      </div>
+
+      <div class="mb-4">
         <% if @minimum_password_length %>
-        <em>(<%= @minimum_password_length %> characters minimum)</em>
-        <% end %><br />
-        <%= f.password_field :password, autocomplete: "new-password", placeholder: "Password" %>
+          <em class="text-sm text-white">(<%= @minimum_password_length %> characters minimum)</em><br />
+        <% end %>
+        <%= f.password_field :password, autocomplete: "new-password", placeholder: "Password", class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" %>
       </div>
 
-      <div class="field">
-				<%= f.password_field :password_confirmation, autocomplete: "new-password", placeholder: "Confirm Password" %>
-			</div>
+      <div class="mb-4">
+        <%= f.password_field :password_confirmation, autocomplete: "new-password", placeholder: "Confirm Password", class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" %>
+      </div>
 
-      <div class="actions">
-        <%= f.submit "Sign up" %>
+      <div class="mb-4">
+        <%= f.submit "Sign up", class: "w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
       </div>
     <% end %>
-
-    <%= link_to "Back", root_path %><br />
-
-    <%= render "devise/shared/links" %>
-    
+  <p>Already Have an Account?</p>
+  <%- if controller_name != 'sessions' %>
+  <%= link_to "Log in", new_session_path(resource_name) %><br />
+<% end %>
   </div>
 </section>

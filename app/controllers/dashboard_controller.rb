@@ -2,6 +2,13 @@ class DashboardController < ApplicationController
   def index
     @user_stocks = current_user.user_stocks
   end
+  def disapprove
+    @user = User.find(params[:id])
+    @user.update(user_status: 'disapproved')
+    UserMailer.account_disapproved(@user).deliver_now
+    redirect_to '/'
+    flash[:disapproved] = "User #{@user.username}'s account has been disapproved."
+  end
 
   def approve
     user = User.find(params[:id])
