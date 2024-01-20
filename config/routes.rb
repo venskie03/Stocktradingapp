@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   # root "posts#index"
 
   root 'pages#home'
+  
   get '/home',          to: 'home#index'
   get '/dashboard',     to: 'dashboard#index'
   get '/transactions',  to: 'transaction#index'
