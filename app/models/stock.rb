@@ -14,5 +14,31 @@ class Stock < ApplicationRecord
       self.last_transaction_price = price
       save!
     end
+
+
+    # check the IEX api for current stock lineup and prices
+
+    def self.update_stocks
+      stocks = Stock.all
+      stocks.each do |stock|
+        stock.update_last_price(stock.current_price)
+      end
+    end
+
+    def current_price
+      IEX::Resources::Price.get(ticker).price
+    end
+  
+    def self.find_by_ticker(ticker_symbol)
+      where(ticker: ticker_symbol).first
+    end
+  
+    def self.new_from_lookup(ticker_symbol)
+      looked_up_stock = IEX::Resources::Company.get(ticker_symbol)
+      return nil unless looked_up_stock
+      new_stock = new(ticker: looked_up_stock.symbol, company_name: looked_up_stock.company_name)
+      new_stock.last_transaction_price = new_stock.current_price
+      new_stock
+    end
   end
   

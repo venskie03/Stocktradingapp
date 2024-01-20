@@ -9,10 +9,10 @@ namespace :stocks do
   
       tech_stocks = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'FB']
   
-      tech_stocks.each do |symbol|
-        company = client.company(symbol)
-        price = client.price(symbol)
-        Stock.create(symbol: symbol, name: company.company_name, current_price: price)
+      tech_stocks.each do |ticker|
+        company = client.company(ticker)
+        price = client.price(ticker)
+        Stock.create(ticker: ticker, company_name: company.company_name, last_transaction_price: price)
       end
     end
   end
