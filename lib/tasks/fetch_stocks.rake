@@ -4,7 +4,7 @@ namespace :stocks do
     task fetch_tech_stocks: :environment do
       client = IEX::Api::Client.new(
         publishable_token: 'pk_953a166c4fba4c748c12a0becf93aebd',
-        endpoint: 'https://cloud.iexapis.com/v1'
+        endpoint: 'https://api.iex.cloud/v1/'
       )
   
       tech_stocks = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'FB']
