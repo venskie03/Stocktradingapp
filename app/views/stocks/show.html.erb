@@ -27,27 +27,9 @@
           </tbody>
           <% end %>
         </table>
-  
-        <table class="table table-dark table-striped">
-          <thead>
-            <tr>
-              <th scope="col">Order Type</th>
-              <th scope="col">Price</th>
-              <th scope="col">Quantity</th>
-            </tr>
-          </thead>
-            <% @sell_orders.each do |order| %>
-          <tbody>
-            <tr>
-              <td><%= order.transaction_type %></td>
-              <td><%= number_with_precision(order.price, precision: 2) %></td>
-              <td><%= number_with_delimiter(order.quantity) %></td>
-            </tr>
-          </tbody>
-          <% end %>
-        </table>
-    <% if can? :create, Order %>
+
+    <%# if can? :create, Order %>
       <%= link_to 'Add Order', new_stock_order_path(@stock) %>
-    <% end %>
+    <%# end %>
     </div>
   </div>
